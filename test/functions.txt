@@ -1,0 +1,17 @@
+f/test_case
+	main
+
+
+f/printf
+	number of %
+	
+f/write (iterate trough and referance/write)
+	conversion/flags_finder
+	
+f/conversion
+	flags
+
+f/base
+
+
+f/errors
