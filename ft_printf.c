@@ -12,10 +12,6 @@ int	ft_isdigit(int c)
 }
 
 
-
-
-
-
 void ft_init(t_list *datalist)
 {
 	datalist->str = 0;
@@ -37,6 +33,11 @@ int		ft_flags(t_list *datalist)	//ERROR handling should be added
 		datalist->str += 2;
 	}
 	else if (datalist->str[1] == '0')
+	{
+		datalist->zero_flag = 1;
+		datalist->str += 2;
+	}
+	else if (datalist->str[1] == '.')
 	{
 		datalist->zero_flag = 1;
 		datalist->str += 2;
@@ -93,5 +94,5 @@ int		ft_printf(char *format, ...)
 
 int	main(void)
 {
-	ft_printf("Hello world %s How are you doing", "abcdef%");
+	ft_printf("result: %x", 2147483647);
 }
