@@ -1,18 +1,6 @@
 #include "ft_printf.h"
 
-void	ft_putchar_fd(char c, int fd)
-{
-	write (fd, &c, 1);
-}
-int	ft_isdigit(int c)
-{
-	if (c >= '0' && c <= '9')
-		return (1);
-	return (0);
-}
-
-
-void ft_init(t_list *datalist)
+void ft_init(t1_list *datalist)
 {
 	datalist->str = 0;
 	datalist->substr = 0;
@@ -22,7 +10,7 @@ void ft_init(t_list *datalist)
 	datalist->width = 0;
 }
 
-int		ft_flags(t_list *datalist)	//ERROR handling should be added
+int		ft_flags(t1_list *datalist)	//ERROR handling should be added
 {
 	int		i;
 
@@ -51,7 +39,7 @@ int		ft_flags(t_list *datalist)	//ERROR handling should be added
 	return (0);
 }
 
-int	ft_blockprint(t_list *datalist)
+int	ft_blockprint(t1_list *datalist)
 {
 	while (*datalist->str != '\0')
 	{
@@ -79,7 +67,7 @@ int	ft_blockprint(t_list *datalist)
 int		ft_printf(char *format, ...)
 {
 	va_list	args;
-	t_list	datalist;
+	t1_list	datalist;
 
 	va_start(args, format);
 	ft_init(&datalist);
@@ -90,9 +78,4 @@ int		ft_printf(char *format, ...)
 	va_end(args);
 	return (0);
 
-}
-
-int	main(void)
-{
-	ft_printf("result: %x", 2147483647);
 }
