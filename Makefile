@@ -13,6 +13,7 @@ all:	${NAME}
 
 $(NAME): ${SRCS} $(INC)
 	$(CC) $(SRCS) libft.a $(CFLAGS)
+	./a.out
 
 
 clean:	

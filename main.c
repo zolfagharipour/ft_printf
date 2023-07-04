@@ -2,5 +2,5 @@
 
 int	main(void)
 {
-	ft_printf("result: %x", 2147483647);
+	ft_printf("result: %d", 4421);
 }

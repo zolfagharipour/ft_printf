@@ -99,7 +99,7 @@ int		ft_conversion(t1_list *datalist)	//ERROR handling should be added
 		ft_conv_x(datalist);
 
 	datalist->str += 2;
-	printf("<substr> %s\n", datalist->substr);
+	printf("%s\n", datalist->substr);
 }
 
 
