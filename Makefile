@@ -1,7 +1,7 @@
 NAME		= a.out
 INC			= ft_printf.h
 CC			= gcc
-CFLAGS		= -L. -lft
+CFLAGS		= -L -lft
 AR			= ar rc
 RM			= rm -rf
 
