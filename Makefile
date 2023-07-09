@@ -1,7 +1,7 @@
 NAME		= a.out
 INC			= ft_printf.h
 CC			= gcc
-CFLAGS		= -Wall -Wextra -Werror -L. -lft
+CFLAGS		= -L. -lft
 AR			= ar rc
 RM			= rm -rf
 
@@ -12,7 +12,8 @@ OBJS		= $(SRCS:.c=.o)
 all:	${NAME} 
 
 $(NAME): ${SRCS} $(INC)
-	$(CC) $(SRCS) $(CFLAGS)
+	$(CC) $(SRCS) libft.a $(CFLAGS)
+	./a.out
 
 
 clean:	
