@@ -76,30 +76,30 @@ int	ft_conv_x(t1_list *datalist)
 		datalist->substr[i] = hex_digits[nb % 16];
 		nb /= 16;
 	}
-	if (datalist->str[1] == 'X')
+	if (*datalist->str == 'X')
 		ft_strupper(datalist->substr);
 }
 
 int		ft_conversion(t1_list *datalist)	//ERROR handling should be added
 {
 	char	*temp_str;
-	if (datalist->str[1] == 'c')
+	if (*datalist->str == 'c')
 	{
 		datalist->substr = (char *)malloc(2 * sizeof(char));
 		datalist->substr[0] = va_arg(*datalist->args, int);
 		datalist->substr[1] = '\0';
 	}
-	else if (datalist->str[1] == 's')
+	else if (*datalist->str == 's')
 		datalist->substr = va_arg(*datalist->args, char *);
-	else if (datalist->str[1] == 'd' || datalist->str[1] == 'i')
+	else if (*datalist->str == 'd' || *datalist->str == 'i')
 		datalist->substr = ft_itoa(va_arg(*datalist->args, int));
-	else if (datalist->str[1] == 'u')
+	else if (*datalist->str == 'u')
 		ft_conv_u(datalist);
-	else if (datalist->str[1] == 'x' || datalist->str[1] == 'X')
+	else if (*datalist->str == 'x' || *datalist->str == 'X')
 		ft_conv_x(datalist);
 
-	datalist->str += 2;
-	printf("%s\n", datalist->substr);
+	datalist->str ++;
+	printf("%s", datalist->substr);
 }
 
 

@@ -10,32 +10,50 @@ void ft_init(t1_list *datalist)
 	datalist->width = 0;
 }
 
+int		ft_digitcount(int c)
+{
+	int	i;
+
+	i = 0;
+	while (c != 0)
+	{
+		c /= 10;
+		i++;
+	}
+	return (i);
+}
+
+void	f_detector(t1_list *datalist)
+{
+	if (*datalist->str == '-')
+		datalist->min_flag = 1;
+	if (*datalist->str == '0')
+		datalist->zero_flag = 1;
+	if (*datalist->str == '.')
+	{
+		datalist->zero_flag = 1;
+		datalist->min_flag = 0;
+	}
+	if (*datalist->str == '#')
+		datalist->hash_flag = 1;
+	if (*datalist->str == ' ')
+		datalist->space_flag = 1;
+	if (*datalist->str == '+')
+		datalist->plus_flag = 1;
+}
+
 int		ft_flags(t1_list *datalist)	//ERROR handling should be added
 {
 	int		i;
 
 	i = 0;
-	if (datalist->str[1] == '-')
+	while (ft_isalpha(*datalist->str))
 	{
-		datalist->min_flag = 1;
-		datalist->str += 2;
-	}
-	else if (datalist->str[1] == '0')
-	{
-		datalist->zero_flag = 1;
-		datalist->str += 2;
-	}
-	else if (datalist->str[1] == '.')
-	{
-		datalist->zero_flag = 1;
-		datalist->str += 2;
-	}
-	while (ft_isdigit(*datalist->str))
-	{
-		datalist->width *= 10;
-		datalist->width += *datalist->str - 48;
-		datalist->str++;
-	}
+		f_detector(datalist);
+		datalist->str ++;
+	}		
+	datalist->width = ft_atoi(datalist->str);
+	datalist->str += ft_digitcount(datalist->width);
 	return (0);
 }
 
@@ -45,7 +63,8 @@ int	ft_blockprint(t1_list *datalist)
 	{
 		if (*datalist->str == '%')
 		{
-			if (datalist->str[1] != '%')
+			datalist->str++;
+			if (*datalist->str != '%')
 			{
 				ft_flags(datalist);		//  do error handling if there was an error
 				ft_conversion(datalist);
@@ -59,7 +78,7 @@ int	ft_blockprint(t1_list *datalist)
 		}
 		else
 			ft_putchar_fd(*datalist->str++, 1);
-		// check for \0 inside of format string...
+
 	}
 
 }

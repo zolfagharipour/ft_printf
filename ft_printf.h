@@ -4,23 +4,26 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdarg.h>
-#include "libft.h"
+# include "libft.h"
 #	include <stdio.h>
 
 
 typedef struct s1_list {
+	va_list	*args;
 	char	*str;
 	char	*substr;
 	int		printed;
-	va_list	*args;
 	int		arg_count;
 	int		min_flag;
 	int		zero_flag;
+	int		hash_flag;
+	int		space_flag;
+	int		plus_flag;
 	int		width;
 
 } t1_list;
 
-int		ft_printf(char *format, ...);
+int		ft_printf(char *format, ...) __attribute__ ((format (printf, 1, 2)));
 	void 	ft_init(t1_list *datalist);
 	//void	ft_percentage_count(t1_list *datalist);
 int		ft_blockprint(t1_list *datalist);		//iterate through str and print out characters. if we find %, read the conversion and print matching argument from args using other fuctions 
@@ -30,7 +33,7 @@ int		ft_flags(t1_list *datalist);		//read the flags ( +check if its a valid flag
 int		ft_conversion(t1_list *datalist);	//switch system. modifies the substr
 	int		ft_base_convert(t1_list datalist);		//conversion for the hexadecimal
 void	ft_error(int err);
-int		ft_subprint(t1_list datalist);		//using substr and considering all the (just)flags print substr.
+void		ft_subprint(t1_list datalist);		//using substr and considering all the (just)flags print substr.
 	int		ft_cal_width (t1_list datalist);
 //ft_putstr_fd (char *str, int fd);
 
