@@ -2,6 +2,6 @@
 
 int	main(void)
 {
-	//ft_printf("result: %5x%s\n", 15, "Sucks");
-	printf("[%-.9d]", 15);
+	ft_printf("[%s]\n", "12345");
+	printf("[%p]\n", "a");
 }

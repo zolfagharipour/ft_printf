@@ -2,11 +2,12 @@
 
 void ft_init(t1_list *datalist)
 {
-	datalist->str = 0;
 	datalist->substr = 0;
+	datalist->prefix = 0;
 	datalist->arg_count = 0;
 	datalist->min_flag = 0;
 	datalist->zero_flag = 0;
+	datalist->hash_flag = 0;
 	datalist->width = 0;
 }
 
@@ -25,21 +26,25 @@ int		ft_digitcount(int c)
 
 void	f_detector(t1_list *datalist)
 {
-	if (*datalist->str == '-')
-		datalist->min_flag = 1;
-	if (*datalist->str == '0')
+	if (*datalist->str == '0' && !datalist->min_flag)
 		datalist->zero_flag = 1;
+	if (*datalist->str == '-')
+	{
+		datalist->min_flag = 1;
+		datalist->zero_flag = 0;
+	}
 	if (*datalist->str == '.')
 	{
 		datalist->zero_flag = 1;
 		datalist->min_flag = 0;
+		datalist->dot_flag ++;
 	}
 	if (*datalist->str == '#')
-		datalist->hash_flag = 1;
-	if (*datalist->str == ' ')
-		datalist->space_flag = 1;
+		datalist->hash_flag ++;
+	if (*datalist->str == ' ' && datalist->prefix != '+')
+		datalist->prefix = ' ';
 	if (*datalist->str == '+')
-		datalist->plus_flag = 1;
+		datalist->prefix = '+';
 }
 
 int		ft_flags(t1_list *datalist)	//ERROR handling should be added
@@ -47,11 +52,11 @@ int		ft_flags(t1_list *datalist)	//ERROR handling should be added
 	int		i;
 
 	i = 0;
-	while (ft_isalpha(*datalist->str))
+	while (!ft_isalpha(*datalist->str) && (!ft_isalnum(*datalist->str) || *datalist->str == '0'))
 	{
 		f_detector(datalist);
 		datalist->str ++;
-	}		
+	}
 	datalist->width = ft_atoi(datalist->str);
 	datalist->str += ft_digitcount(datalist->width);
 	return (0);
@@ -61,6 +66,7 @@ int	ft_blockprint(t1_list *datalist)
 {
 	while (*datalist->str != '\0')
 	{
+		ft_init(datalist);
 		if (*datalist->str == '%')
 		{
 			datalist->str++;
@@ -68,19 +74,20 @@ int	ft_blockprint(t1_list *datalist)
 			{
 				ft_flags(datalist);		//  do error handling if there was an error
 				ft_conversion(datalist);
-				//ft_subprint(*datalist);
+				ft_subprint(datalist);
 			}
 			else
 			{
 				write (1,"%%",1);
-				datalist->str += 2;
+				datalist->str += 1;
 			}
 		}
 		else
-			ft_putchar_fd(*datalist->str++, 1);
-
+		{
+			ft_putchar_fd(*datalist->str, 1);
+			datalist->str++;
+		}
 	}
-
 }
 
 int		ft_printf(char *format, ...)

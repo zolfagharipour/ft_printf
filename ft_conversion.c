@@ -25,24 +25,6 @@ int	ft_strupper(char *str)
 	}
 }
 
-int	ft_conv_u(t1_list *datalist)
-{
-	long int	nb;
-
-	//if (nb > FT_INT_MAX)
-	if (nb > 2147483647)
-	{
-		printf("Number too large. Add error handling...");//ERROR handling should be added
-		return (1);
-	}
-	nb = va_arg(*datalist->args, int);
-	if (nb < 0)
-		nb = 4294967295 + nb;
-	datalist->substr = ft_itoa(nb);
-	return (0);
-}
-
-
 int	ft_hexdigits(int dec)
 {
 	int		counter;
@@ -57,6 +39,11 @@ int	ft_hexdigits(int dec)
 		return (counter);
 	else
 		return (1);
+}
+
+void	ft_setflag(t1_list *datalist)
+{
+	datalist->prefix = 0;
 
 }
 
@@ -77,29 +64,38 @@ int	ft_conv_x(t1_list *datalist)
 		nb /= 16;
 	}
 	if (*datalist->str == 'X')
+	{
 		ft_strupper(datalist->substr);
+		datalist->hash_flag ++;
+	}
+	datalist->hash_flag ++;
 }
 
 int		ft_conversion(t1_list *datalist)	//ERROR handling should be added
 {
 	char	*temp_str;
 	if (*datalist->str == 'c')
-	{
-		datalist->substr = (char *)malloc(2 * sizeof(char));
-		datalist->substr[0] = va_arg(*datalist->args, int);
-		datalist->substr[1] = '\0';
-	}
+		datalist->substr = ft_itoa(va_arg(*datalist->args, int) - 48);
 	else if (*datalist->str == 's')
 		datalist->substr = va_arg(*datalist->args, char *);
 	else if (*datalist->str == 'd' || *datalist->str == 'i')
-		datalist->substr = ft_itoa(va_arg(*datalist->args, int));
+		datalist->substr = ft_itoa_s(va_arg(*datalist->args, int), datalist);
 	else if (*datalist->str == 'u')
-		ft_conv_u(datalist);
+		datalist->substr = ft_itoa(va_arg(*datalist->args, long int));
 	else if (*datalist->str == 'x' || *datalist->str == 'X')
 		ft_conv_x(datalist);
-
+	if (*datalist->str != 'd' && *datalist->str != 'i')
+		datalist->prefix = '\0';
+	if (*datalist->str != 'x' && *datalist->str != 'X')
+		datalist->hash_flag = 0;
+	if (*datalist->str == 'c' || *datalist->str == 's')
+	{
+		datalist->zero_flag = 0;
+		datalist->dot_flag ++;
+		if (datalist->width > ft_strlen(datalist->substr))
+			datalist->width = ft_strlen(datalist->substr);
+	}
 	datalist->str ++;
-	printf("%s", datalist->substr);
 }
 
 
