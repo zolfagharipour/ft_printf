@@ -23,7 +23,7 @@ typedef struct s1_list {
 
 } t1_list;
 
-int		ft_printf(char *format, ...) __attribute__ ((format (printf, 1, 2)));
+int		ft_printf(char *format, ...) 
 	void 	ft_init(t1_list *datalist);
 	//void	ft_percentage_count(t1_list *datalist);
 int		ft_blockprint(t1_list *datalist);		//iterate through str and print out characters. if we find %, read the conversion and print matching argument from args using other fuctions 

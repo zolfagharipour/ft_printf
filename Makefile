@@ -1,20 +1,23 @@
-NAME		= a.out
+NAME		= libftprintf.a
 INC			= ft_printf.h
 CC			= gcc
-CFLAGS		= -L -lft
+CFLAGS		= -Wall -Wextra -Werror
 AR			= ar rc
 RM			= rm -rf
 
-SRCS		= $(wildcard *.c)
+SRC		= $(wildcard *.c)
 
-OBJS		= $(SRCS:.c=.o)
+OBJ		= $(SRCS:.c=.o)
 
 all:	${NAME} 
 
-$(NAME): ${SRCS} $(INC)
-	$(CC) $(SRCS) libft.a $(CFLAGS)
-	./a.out
+$(NAME): $(OBJS)
+	make -C ./libft 
+	cp libft/libft.a libftprintf.a
+	$(AR) $(NAME) $(OBJS)
 
+%.o: %.c $(INC) 
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:	
 	$(RM) $(OBJS)
