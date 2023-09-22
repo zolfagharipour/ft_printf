@@ -1,9 +1,0 @@
-1. ERROR handling
-2. understand %p
-3. datalist.printed
-4. ft_subprint
-5. free mallocs
-6. define INT_MAX ...
-7. research buffer handling (buffer handling for conv_x)
-8. add the percision flag.
-9. check for arrangement of flags specially width and percision.
