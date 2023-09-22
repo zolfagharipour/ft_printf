@@ -4,7 +4,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdarg.h>
-# include "libft.h"
+#include "libft/libft.h"
 #	include <stdio.h>
 
 
@@ -19,11 +19,11 @@ typedef struct s1_list {
 	int		min_flag;
 	int		zero_flag;
 	int		hash_flag;
-	int		width;
+	size_t		width;
 
 } t1_list;
 
-int		ft_printf(char *format, ...) 
+int		ft_printf(char *format, ...);
 	void 	ft_init(t1_list *datalist);
 	//void	ft_percentage_count(t1_list *datalist);
 int		ft_blockprint(t1_list *datalist);		//iterate through str and print out characters. if we find %, read the conversion and print matching argument from args using other fuctions 

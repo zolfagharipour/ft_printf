@@ -5,9 +5,12 @@ CFLAGS		= -Wall -Wextra -Werror
 AR			= ar rc
 RM			= rm -rf
 
-SRC		= $(wildcard *.c)
+SRCS		= 	ft_printf.c \
+				ft_conversion.c \
+				ft_itoa_s.c \
+				ft_subprint.c
 
-OBJ		= $(SRCS:.c=.o)
+OBJS		= $(SRCS:.c=.o)
 
 all:	${NAME} 
 

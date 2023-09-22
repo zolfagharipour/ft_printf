@@ -49,9 +49,6 @@ void	f_detector(t1_list *datalist)
 
 int		ft_flags(t1_list *datalist)	//ERROR handling should be added
 {
-	int		i;
-
-	i = 0;
 	while (!ft_isalpha(*datalist->str) && (!ft_isalnum(*datalist->str) || *datalist->str == '0'))
 	{
 		f_detector(datalist);
@@ -88,6 +85,7 @@ int	ft_blockprint(t1_list *datalist)
 			datalist->str++;
 		}
 	}
+	return (0);
 }
 
 int		ft_printf(char *format, ...)

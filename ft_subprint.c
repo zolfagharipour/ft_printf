@@ -31,7 +31,7 @@ void	ft_sprint(t1_list *datalist)
 
 void	ft_zeros(t1_list *datalist)
 {
-	int	i;
+	size_t	i;
 
 	i = 0;
 	while(i < datalist->width - ft_strlen(datalist->substr) && datalist->width > ft_strlen(datalist->substr))

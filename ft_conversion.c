@@ -1,20 +1,5 @@
 #include "ft_printf.h"
 
-static int		ft_nlen(long int n)
-{
-	int		i;
-
-	i = 0;
-	if (n < 0)
-		i++;
-	while (n != 0)
-	{
-		n /= 10;
-		i++;
-	}
-	return (i);
-}
-
 int	ft_strupper(char *str)
 {
 	while (*str)
@@ -23,6 +8,7 @@ int	ft_strupper(char *str)
 			*str -= 32;
 		str++;
 	}
+	return (0);
 }
 
 int	ft_hexdigits(int dec)
@@ -69,11 +55,11 @@ int	ft_conv_x(t1_list *datalist)
 		datalist->hash_flag ++;
 	}
 	datalist->hash_flag ++;
+	return (0);
 }
 
 int		ft_conversion(t1_list *datalist)	//ERROR handling should be added
 {
-	char	*temp_str;
 	if (*datalist->str == 'c')
 		datalist->substr = ft_itoa(va_arg(*datalist->args, int) - 48);
 	else if (*datalist->str == 's')
@@ -96,6 +82,7 @@ int		ft_conversion(t1_list *datalist)	//ERROR handling should be added
 			datalist->width = ft_strlen(datalist->substr);
 	}
 	datalist->str ++;
+	return (0);
 }
 
 
