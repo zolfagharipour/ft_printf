@@ -5,6 +5,7 @@ void ft_init(t1_list *datalist)
 	datalist->substr = 0;
 	datalist->prefix = 0;
 	datalist->arg_count = 0;
+	datalist->dot_flag = 0;
 	datalist->min_flag = 0;
 	datalist->zero_flag = 0;
 	datalist->hash_flag = 0;
@@ -40,14 +41,14 @@ void	f_detector(t1_list *datalist)
 		datalist->dot_flag ++;
 	}
 	if (*datalist->str == '#')
-		datalist->hash_flag ++;
+		datalist->hash_flag += 4;
 	if (*datalist->str == ' ' && datalist->prefix != '+')
 		datalist->prefix = ' ';
 	if (*datalist->str == '+')
 		datalist->prefix = '+';
 }
 
-int		ft_flags(t1_list *datalist)	//ERROR handling should be added
+void		ft_flags(t1_list *datalist)
 {
 	while (!ft_isalpha(*datalist->str) && (!ft_isalnum(*datalist->str) || *datalist->str == '0'))
 	{
@@ -56,10 +57,9 @@ int		ft_flags(t1_list *datalist)	//ERROR handling should be added
 	}
 	datalist->width = ft_atoi(datalist->str);
 	datalist->str += ft_digitcount(datalist->width);
-	return (0);
 }
 
-int	ft_blockprint(t1_list *datalist)
+void	ft_blockprint(t1_list *datalist)
 {
 	while (*datalist->str != '\0')
 	{
@@ -69,23 +69,24 @@ int	ft_blockprint(t1_list *datalist)
 			datalist->str++;
 			if (*datalist->str != '%')
 			{
-				ft_flags(datalist);		//  do error handling if there was an error
+				ft_flags(datalist);
 				ft_conversion(datalist);
 				ft_subprint(datalist);
 			}
 			else
 			{
 				write (1,"%%",1);
+				datalist->printed++;
 				datalist->str += 1;
 			}
 		}
 		else
 		{
 			ft_putchar_fd(*datalist->str, 1);
+			datalist->printed++;
 			datalist->str++;
 		}
 	}
-	return (0);
 }
 
 int		ft_printf(char *format, ...)
@@ -100,6 +101,5 @@ int		ft_printf(char *format, ...)
 	datalist.args = &args;	
 	ft_blockprint(&datalist); // do error handling if there was an error
 	va_end(args);
-	return (0);
-
+	return (datalist.printed);
 }
