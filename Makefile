@@ -11,9 +11,13 @@ OBJS		= $(SRCS:.c=.o)
 
 all:	${NAME} 
 
-$(NAME):
-	cc $(SRCS) libft.a -L -lft
-	./a.out
+$(NAME): $(OBJS)
+	make -C ./libft 
+	cp libft/libft.a libftprintf.a
+	$(AR) $(NAME) $(OBJS)
+
+%.o: %.c $(INC) 
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:	
 	$(RM) $(OBJS)
