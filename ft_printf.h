@@ -7,7 +7,6 @@
 # include "libft/libft.h"
 #	include <stdio.h>
 
-
 typedef struct s1_list {
 	va_list	*args;
 	char	*str;
@@ -19,26 +18,18 @@ typedef struct s1_list {
 	int		min_flag;
 	int		zero_flag;
 	int		hash_flag;
+	int		percent;
 	size_t		width;
+	size_t		precision;
 
 } t1_list;
 
+
 int		ft_printf(char *format, ...);
-void 	ft_init(t1_list *datalist);
 void	ft_subprint(t1_list *datalist);
-void	ft_blockprint(t1_list *datalist);
-void	ft_zeros(t1_list *datalist);
-void	ft_sprint(t1_list *datalist);
-void	ft_hprefix(t1_list *datalist);
-void	ft_flags(t1_list *datalist);
-void	ft_conversion(t1_list *datalist);
+int		ft_conversion(t1_list *datalist);
 char	*ft_itoa_s(int n , t1_list *datalist);
-void	ft_conv_p(t1_list *datalist);
-void	ft_conv_x(t1_list *datalist);
-void	f_detector(t1_list *datalist);
-int		ft_digitcount(int c);
-int		ft_hexdigits(int dec);
-void	ft_strupper(char *str);
+
 
 
 #endif

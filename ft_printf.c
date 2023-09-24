@@ -1,6 +1,6 @@
 #include "ft_printf.h"
 
-void ft_init(t1_list *datalist)
+static 	void ft_init(t1_list *datalist)
 {
 	datalist->substr = 0;
 	datalist->prefix = 0;
@@ -9,10 +9,12 @@ void ft_init(t1_list *datalist)
 	datalist->min_flag = 0;
 	datalist->zero_flag = 0;
 	datalist->hash_flag = 0;
+	datalist->percent = 0;
 	datalist->width = 0;
+	datalist->precision = 0;
 }
 
-int		ft_digitcount(int c)
+static int		ft_digitcount(int c)
 {
 	int	i;
 
@@ -25,42 +27,67 @@ int		ft_digitcount(int c)
 	return (i);
 }
 
-void	f_detector(t1_list *datalist)
+static void	f_detector(t1_list *datalist)
 {
-	if (*datalist->str == '0' && !datalist->min_flag)
+	if (*datalist->str == '0' && !datalist->min_flag && !datalist->dot_flag)
 		datalist->zero_flag = 1;
-	if (*datalist->str == '-')
+	else if (*datalist->str == '-')
 	{
 		datalist->min_flag = 1;
 		datalist->zero_flag = 0;
 	}
-	if (*datalist->str == '.')
+	else if (*datalist->str == '.')
 	{
-		datalist->zero_flag = 1;
-		datalist->min_flag = 0;
 		datalist->dot_flag ++;
+		datalist->zero_flag = 0;
 	}
-	if (*datalist->str == '#')
+	else if (*datalist->str == '#')
 		datalist->hash_flag += 4;
-	if (*datalist->str == ' ' && datalist->prefix != '+')
+	else if (*datalist->str == ' ' && datalist->prefix != '+')
 		datalist->prefix = ' ';
-	if (*datalist->str == '+')
+	else if (*datalist->str == '+')
 		datalist->prefix = '+';
+	else if (*datalist->str == '+')
+		datalist->prefix = '+';
+	else if (*datalist->str == '%')
+		datalist->percent = 1;		
 }
 
-void		ft_flags(t1_list *datalist)
+static int		ft_flags(t1_list *datalist)
 {
-	while (!ft_isalpha(*datalist->str) && (!ft_isalnum(*datalist->str) || *datalist->str == '0'))
+	while (!ft_isalpha(*datalist->str) && *datalist->str != '\0' && *datalist->str != '%')
 	{
+		if (!ft_isalnum(*datalist->str) || *datalist->str == '0')
+		{
 		f_detector(datalist);
 		datalist->str ++;
+		}
+		else
+		{
+			if (!datalist->dot_flag)
+			{
+				datalist->width = ft_atoi(datalist->str);
+				datalist->str += ft_digitcount(datalist->width);
+			}
+			else
+			{
+				datalist->precision = ft_atoi(datalist->str);
+				datalist->str += ft_digitcount(datalist->precision);
+			}
+		}
 	}
-	datalist->width = ft_atoi(datalist->str);
-	datalist->str += ft_digitcount(datalist->width);
+	if (*datalist->str == '\0')
+		return (0);
+	else if (*datalist->str == '%')
+		return (2);
+	return (1);
 }
 
-void	ft_blockprint(t1_list *datalist)
+static int	ft_blockprint(t1_list *datalist)
 {
+	char	*ptr;
+	int		i;
+
 	while (*datalist->str != '\0')
 	{
 		ft_init(datalist);
@@ -69,9 +96,25 @@ void	ft_blockprint(t1_list *datalist)
 			datalist->str++;
 			if (*datalist->str != '%')
 			{
-				ft_flags(datalist);
-				ft_conversion(datalist);
-				ft_subprint(datalist);
+				ptr = datalist->str;
+				if (!ft_flags(datalist))
+					return (0);
+				else if (*datalist->str == '%')
+				{
+					write (1,"%%",1);
+					datalist->printed++;
+					datalist->str += 1;
+				}
+				else
+				{
+					if (!ft_conversion(datalist))
+						datalist->str = ptr;
+					else
+					{
+						datalist->str++;
+						ft_subprint(datalist);
+					}
+				}
 			}
 			else
 			{
@@ -87,6 +130,7 @@ void	ft_blockprint(t1_list *datalist)
 			datalist->str++;
 		}
 	}
+	return (1);
 }
 
 int		ft_printf(char *format, ...)
@@ -99,7 +143,11 @@ int		ft_printf(char *format, ...)
 	datalist.printed = 0;
 	datalist.str = format;
 	datalist.args = &args;	
-	ft_blockprint(&datalist); // do error handling if there was an error
+	if (!ft_blockprint(&datalist))
+	{
+		va_end(args);
+		return (-1);
+	}
 	va_end(args);
 	return (datalist.printed);
 }

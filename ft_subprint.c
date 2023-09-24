@@ -1,6 +1,6 @@
 #include "ft_printf.h"
 
-void	ft_hprefix(t1_list *datalist)
+static void	ft_hprefix(t1_list *datalist)
 {
 	if (datalist->hash_flag == 6)
 	{
@@ -14,30 +14,21 @@ void	ft_hprefix(t1_list *datalist)
 	}
 }
 
-void	ft_sprint(t1_list *datalist)
+static void	ft_sprint(t1_list *datalist)
 {
 	if (datalist->hash_flag > 4 && !datalist->zero_flag)
 		ft_hprefix(datalist);
-	if (datalist->dot_flag == 2)
+	while (*datalist->substr)
 	{
-		while (*datalist->substr && datalist->width > 0)
-		{
-			ft_putchar_fd(*datalist->substr, 1);
-			datalist->printed++;
+		ft_putchar_fd(*datalist->substr, 1);
+		datalist->printed++;
+		datalist->substr++;
+		if (datalist->width > 0)
 			datalist->width--;
-			datalist->substr++;
-		}
 	}
-	else
-		while (*datalist->substr)
-		{
-			ft_putchar_fd(*datalist->substr, 1);
-			datalist->printed++;
-			datalist->substr++;
-		}
 }
 
-void	ft_zeros(t1_list *datalist)
+static void	ft_zeros(t1_list *datalist)
 {
 	size_t	i;
 
@@ -69,13 +60,13 @@ void	ft_subprint(t1_list *datalist)
 		datalist->width--;
 	if(!datalist->min_flag)
 	{
-		if (datalist->zero_flag)
+		if (datalist->zero_flag && datalist->prefix)
 		{
 			ft_putchar_fd(datalist->prefix, 1);
 			datalist->printed++;
 		}
 		ft_zeros(datalist);
-		if (!datalist->zero_flag)
+		if (!datalist->zero_flag && datalist->prefix)
 		{
 			ft_putchar_fd(datalist->prefix, 1);
 			datalist->printed++;
@@ -84,10 +75,11 @@ void	ft_subprint(t1_list *datalist)
 	}
 	else
 	{
-		if (datalist->width >= ft_strlen(datalist->substr))
-			datalist->width -= ft_strlen(datalist->substr);
-		ft_putchar_fd(datalist->prefix, 1);
-		datalist->printed++;
+		if (datalist->prefix)
+		{
+			ft_putchar_fd(datalist->prefix, 1);
+			datalist->printed++;
+		}
 		ft_sprint(datalist);
 		ft_zeros(datalist);
 	}

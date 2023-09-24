@@ -44,8 +44,3 @@ size_t	ft_strlcat(char *dst, const char *src, size_t size)
 	dst[size] = '\0';
 	return (d_len + s_len);
 }
-
-int main()
-{
-	printf("%ld\n", ft_strlcat("123456789", "7", 3));
-}
