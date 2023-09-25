@@ -151,3 +151,9 @@ int		ft_printf(char *format, ...)
 	va_end(args);
 	return (datalist.printed);
 }
+ int main ()
+ {
+	int		p = 42;
+	int		nb = printf("%%");
+	printf("\n%d\n", nb);
+ }

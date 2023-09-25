@@ -36,6 +36,8 @@ static void	ft_conv_x(t1_list *datalist)
 	i = ft_hexdigits(nb);
 	datalist->substr = (char *)malloc((i + 1) * sizeof(char));
 	datalist->substr[i] = '\0';
+	if (nb == 0)
+		datalist->substr[0] = '0';
 	while (nb > 0)
 	{
 		i--;
@@ -57,19 +59,22 @@ static void	ft_conv_p(t1_list *datalist)
 	int			i;
 
 	nb = (unsigned long int)va_arg(*datalist->args, void *);
-	i = ft_hexdigits(nb) + 2;
+	if (nb != 0)
+		i = ft_hexdigits(nb) + 2;
+	else
+		i = 6;
 	datalist->substr = (char *)malloc(i  * sizeof(char));
 	datalist->substr[i] = '\0';
 	datalist->substr[0] = '0';
 	datalist->substr[1] = 'x';
+	if (nb == 0)
+		ft_strlcpy(datalist->substr, "(nil)", 6);
 	while (nb > 0)
 	{
 		i--;
 		datalist->substr[i] = hex_digits[nb % 16];
 		nb /= 16;
 	}
-	if (*datalist->str == 'X')
-		ft_strupper(datalist->substr);
 }
 
 static char	*ft_conv_c(t1_list *datalist)
