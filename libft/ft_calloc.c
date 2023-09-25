@@ -6,7 +6,7 @@
 /*   By: mzolfagh <zolfagharipour@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 12:51:50 by mzolfagh          #+#    #+#             */
-/*   Updated: 2023/09/05 12:51:54 by mzolfagh         ###   ########.fr       */
+/*   Updated: 2023/09/13 10:40:45 by mzolfagh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,13 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	void				*ptr;
 
 	f_size = nmemb * size;
+	if (size == 0 || nmemb == 0)
+		return (malloc(0));
 	if (f_size > 2147483647)
-		return (0);
+		return (NULL);
 	ptr = malloc(f_size);
 	if (!ptr)
-		return (0);
+		return (NULL);
 	ft_bzero(ptr, f_size);
 	return (ptr);
 }

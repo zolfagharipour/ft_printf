@@ -19,9 +19,10 @@ char	*ft_strnstr(const char *big, const char *little, size_t len)
 
 	i = 0;
 	l_len = ft_strlen(little);
-
 	if (ft_strlen(little) == 0)
 		return ((char *)big);
+	if (*big == 0 || len == 0)
+		return (0);
 	while (i < len - l_len + 1 && *big != '\0' && len != 0)
 	{
 		if (ft_strncmp(big, little, l_len) == 0 && ft_strlen(big) >= l_len)
@@ -30,9 +31,4 @@ char	*ft_strnstr(const char *big, const char *little, size_t len)
 		i++;
 	}
 	return (0);
-}
-
-int main()
-{
-	printf("%s\n", ft_strnstr(((void*)0), "fake", 3));
 }

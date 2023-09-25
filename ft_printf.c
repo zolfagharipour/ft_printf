@@ -1,153 +1,109 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mzolfagh <zolfagharipour@gmail.com>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/25 13:45:43 by mzolfagh          #+#    #+#             */
+/*   Updated: 2023/09/25 13:45:47 by mzolfagh         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 
-static 	void ft_init(t1_list *datalist)
+void	ft_init(t_list1 *dlst)
 {
-	datalist->substr = 0;
-	datalist->prefix = 0;
-	datalist->arg_count = 0;
-	datalist->dot_flag = 0;
-	datalist->min_flag = 0;
-	datalist->zero_flag = 0;
-	datalist->hash_flag = 0;
-	datalist->percent = 0;
-	datalist->width = 0;
-	datalist->precision = 0;
+	dlst->substr = 0;
+	dlst->prefix = 0;
+	dlst->arg_count = 0;
+	dlst->dot_flag = 0;
+	dlst->min_flag = 0;
+	dlst->zero_flag = 0;
+	dlst->hash_flag = 0;
+	dlst->percent = 0;
+	dlst->width = 0;
+	dlst->precision = 0;
 }
 
-static int		ft_digitcount(int c)
+static void	ft_printcent(t_list1 *dlst)
 {
-	int	i;
-
-	i = 0;
-	while (c != 0)
-	{
-		c /= 10;
-		i++;
-	}
-	return (i);
+	write (1, "%%", 1);
+	dlst->printed++;
+	dlst->str += 1;
 }
 
-static void	f_detector(t1_list *datalist)
+static int	ft_percent(t_list1 *dlst)
 {
-	if (*datalist->str == '0' && !datalist->min_flag && !datalist->dot_flag)
-		datalist->zero_flag = 1;
-	else if (*datalist->str == '-')
-	{
-		datalist->min_flag = 1;
-		datalist->zero_flag = 0;
-	}
-	else if (*datalist->str == '.')
-	{
-		datalist->dot_flag ++;
-		datalist->zero_flag = 0;
-	}
-	else if (*datalist->str == '#')
-		datalist->hash_flag += 4;
-	else if (*datalist->str == ' ' && datalist->prefix != '+')
-		datalist->prefix = ' ';
-	else if (*datalist->str == '+')
-		datalist->prefix = '+';
-	else if (*datalist->str == '+')
-		datalist->prefix = '+';
-	else if (*datalist->str == '%')
-		datalist->percent = 1;		
-}
+	const char	*ptr;
 
-static int		ft_flags(t1_list *datalist)
-{
-	while (!ft_isalpha(*datalist->str) && *datalist->str != '\0' && *datalist->str != '%')
-	{
-		if (!ft_isalnum(*datalist->str) || *datalist->str == '0')
-		{
-		f_detector(datalist);
-		datalist->str ++;
-		}
-		else
-		{
-			if (!datalist->dot_flag)
-			{
-				datalist->width = ft_atoi(datalist->str);
-				datalist->str += ft_digitcount(datalist->width);
-			}
-			else
-			{
-				datalist->precision = ft_atoi(datalist->str);
-				datalist->str += ft_digitcount(datalist->precision);
-			}
-		}
-	}
-	if (*datalist->str == '\0')
+	ptr = dlst->str;
+	if (!ft_flags(dlst))
 		return (0);
-	else if (*datalist->str == '%')
-		return (2);
+	else if (*dlst->str == '%')
+		ft_printcent(dlst);
+	else
+	{
+		if (!ft_conversion(dlst))
+			dlst->str = ptr;
+		else
+		{
+			dlst->str++;
+			ft_subprint(dlst);
+		}
+		free(dlst->substr);
+	}
 	return (1);
 }
 
-static int	ft_blockprint(t1_list *datalist)
+static int	ft_blockprint(t_list1 *dlst)
 {
-	char	*ptr;
-	int		i;
-
-	while (*datalist->str != '\0')
+	while (*dlst->str != '\0')
 	{
-		ft_init(datalist);
-		if (*datalist->str == '%')
+		ft_init(dlst);
+		if (*dlst->str == '%')
 		{
-			datalist->str++;
-			if (*datalist->str != '%')
+			dlst->str++;
+			if (*dlst->str != '%')
 			{
-				ptr = datalist->str;
-				if (!ft_flags(datalist))
+				if (!ft_percent(dlst))
 					return (0);
-				else if (*datalist->str == '%')
-				{
-					write (1,"%%",1);
-					datalist->printed++;
-					datalist->str += 1;
-				}
-				else
-				{
-					if (!ft_conversion(datalist))
-						datalist->str = ptr;
-					else
-					{
-						datalist->str++;
-						ft_subprint(datalist);
-					}
-				}
 			}
 			else
-			{
-				write (1,"%%",1);
-				datalist->printed++;
-				datalist->str += 1;
-			}
+				ft_printcent(dlst);
 		}
 		else
 		{
-			ft_putchar_fd(*datalist->str, 1);
-			datalist->printed++;
-			datalist->str++;
+			ft_putchar_fd(*dlst->str, 1);
+			dlst->printed++;
+			dlst->str++;
 		}
 	}
 	return (1);
 }
 
-int		ft_printf(char *format, ...)
+int	ft_printf(const char *format, ...)
 {
 	va_list	args;
-	t1_list	datalist;
+	t_list1	dlst;
 
 	va_start(args, format);
-	ft_init(&datalist);
-	datalist.printed = 0;
-	datalist.str = format;
-	datalist.args = &args;	
-	if (!ft_blockprint(&datalist))
+	ft_init(&dlst);
+	dlst.printed = 0;
+	dlst.str = format;
+	dlst.args = &args;
+	if (!ft_blockprint(&dlst))
 	{
 		va_end(args);
 		return (-1);
 	}
 	va_end(args);
-	return (datalist.printed);
+	return (dlst.printed);
+}
+#include <stdio.h>
+int main()
+{
+	ft_printf("p25 %s\n", "10");
+	// printf("\n%d\n",    printf("p25 %.50x\n", 100));
+	// printf("\n%d\n", printf("t7 {%1.50d}", -10));
 }

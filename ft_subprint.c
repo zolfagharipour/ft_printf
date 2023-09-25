@@ -1,86 +1,104 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_subprint.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mzolfagh <zolfagharipour@gmail.com>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/25 14:01:01 by mzolfagh          #+#    #+#             */
+/*   Updated: 2023/09/25 14:01:04 by mzolfagh         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 
-static void	ft_hprefix(t1_list *datalist)
+static void	ft_hprefix(t_list1 *dlst)
 {
-	if (datalist->hash_flag == 6)
+	if (dlst->hash_flag == 6)
 	{
 		write(1, "0x", 2);
-		datalist->printed += 2;
+		dlst->printed += 2;
 	}
-	else if (datalist->hash_flag == 7)
+	else if (dlst->hash_flag == 7)
 	{
 		write(1, "0X", 2);
-		datalist->printed += 2;
+		dlst->printed += 2;
 	}
 }
 
-static void	ft_sprint(t1_list *datalist)
+static void	ft_sprint(t_list1 *dlst)
 {
-	if (datalist->hash_flag > 4 && !datalist->zero_flag)
-		ft_hprefix(datalist);
-	while (*datalist->substr)
+	int	i;
+
+	i = 0;
+	if (dlst->hash_flag > 4 && !dlst->zero_flag)
+		ft_hprefix(dlst);
+	while (dlst->substr[i])
 	{
-		ft_putchar_fd(*datalist->substr, 1);
-		datalist->printed++;
-		datalist->substr++;
-		if (datalist->width > 0)
-			datalist->width--;
+		ft_putchar_fd(dlst->substr[i], 1);
+		dlst->printed++;
+		i++;
+		if (dlst->width > 0)
+			dlst->width--;
 	}
 }
 
-static void	ft_zeros(t1_list *datalist)
+static void	ft_zeros(t_list1 *dlst)
 {
 	size_t	i;
 
 	i = 0;
-	while(i < datalist->width - ft_strlen(datalist->substr) && datalist->width > ft_strlen(datalist->substr))
+	while (i < dlst->width - ft_strlen(dlst->substr)
+		&& dlst->width > ft_strlen(dlst->substr))
 	{
-		if (datalist->zero_flag)
+		if (dlst->zero_flag)
 		{
 			write(1, "0", 1);
-			datalist->printed++;
+			dlst->printed++;
 		}
 		else
 		{
 			write(1, " ", 1);
-			datalist->printed++;
+			dlst->printed++;
 		}
 		i++;
 	}
 }
 
-
-void	ft_subprint(t1_list *datalist)
+static void	ft_min(t_list1 *dlst)
 {
-	if (datalist->hash_flag > 4 && datalist->zero_flag)
-		ft_hprefix(datalist);
-	else if (datalist->hash_flag > 4 && !datalist->zero_flag && datalist->width > 1)
-		datalist->width -= 2;
-	if (datalist->prefix && datalist->width > 1)
-		datalist->width--;
-	if(!datalist->min_flag)
+	if (dlst->zero_flag && dlst->prefix)
 	{
-		if (datalist->zero_flag && datalist->prefix)
-		{
-			ft_putchar_fd(datalist->prefix, 1);
-			datalist->printed++;
-		}
-		ft_zeros(datalist);
-		if (!datalist->zero_flag && datalist->prefix)
-		{
-			ft_putchar_fd(datalist->prefix, 1);
-			datalist->printed++;
-		}
-		ft_sprint(datalist);
+		ft_putchar_fd(dlst->prefix, 1);
+		dlst->printed++;
 	}
+	ft_zeros(dlst);
+	if (!dlst->zero_flag && dlst->prefix)
+	{
+		ft_putchar_fd(dlst->prefix, 1);
+		dlst->printed++;
+	}
+	ft_sprint(dlst);
+}
+
+void	ft_subprint(t_list1 *dlst)
+{
+	if (dlst->hash_flag > 4 && dlst->zero_flag)
+		ft_hprefix(dlst);
+	else if (dlst->hash_flag > 4 && !dlst->zero_flag && dlst->width > 1)
+		dlst->width -= 2;
+	if (dlst->prefix && dlst->width > 1)
+		dlst->width--;
+	if (!dlst->min_flag)
+		ft_min(dlst);
 	else
 	{
-		if (datalist->prefix)
+		if (dlst->prefix)
 		{
-			ft_putchar_fd(datalist->prefix, 1);
-			datalist->printed++;
+			ft_putchar_fd(dlst->prefix, 1);
+			dlst->printed++;
 		}
-		ft_sprint(datalist);
-		ft_zeros(datalist);
+		ft_sprint(dlst);
+		ft_zeros(dlst);
 	}
 }

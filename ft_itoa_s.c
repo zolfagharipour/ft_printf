@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_itoa_s.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mzolfagh <zolfagharipour@gmail.com>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/25 13:55:52 by mzolfagh          #+#    #+#             */
+/*   Updated: 2023/09/25 13:55:55 by mzolfagh         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 
 static int	ft_nlen(int n)
@@ -13,7 +25,7 @@ static int	ft_nlen(int n)
 	return (i);
 }
 
-char	*ft_itoa_s(int n , t1_list *datalist)
+char	*ft_itoa_s(int n, t_list1 *dlst)
 {
 	long int	ncpy;
 	char		*nbr;
@@ -27,7 +39,7 @@ char	*ft_itoa_s(int n , t1_list *datalist)
 	nbr[i] = '\0';
 	if (ncpy < 0)
 	{
-		datalist->prefix = '-';
+		dlst->prefix = '-';
 		ncpy *= -1;
 	}
 	if (ncpy == 0)

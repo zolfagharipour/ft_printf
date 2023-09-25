@@ -71,7 +71,7 @@ char	**ft_split(char const *s, char c)
 		while (s[i] != c && s[i])
 			i++;
 		ptr[j] = (char *)malloc(sizeof(char) * (i + 1));
-		if (!(ptr))
+		if (!(ptr[j]))
 			return (ft_free_malloc(ptr, j));
 		ft_strlcpy(ptr[j], s, i + 1);
 		j++;
