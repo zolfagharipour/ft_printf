@@ -17,6 +17,8 @@ static int	ft_nlen(int n)
 	int		i;
 
 	i = 0;
+	if (n == 0)
+		return (1);
 	while (n != 0)
 	{
 		n /= 10;

@@ -58,8 +58,8 @@ void	ft_conv_p(t_list1 *dlst)
 	if (nb != 0)
 		i = ft_hexdigits(nb) + 2;
 	else
-		i = 6;
-	dlst->substr = (char *)malloc(i * sizeof(char));
+		i = 5;
+	dlst->substr = (char *)malloc((i + 1) * sizeof(char));
 	dlst->substr[i] = '\0';
 	dlst->substr[0] = '0';
 	dlst->substr[1] = 'x';
@@ -96,9 +96,18 @@ char	*ft_conv_c(t_list1 *dlst)
 char	*ft_conv_s(t_list1 *dlst)
 {
 	char	*str;
+	char	*ptr;
 
 	str = va_arg(*dlst->args, char *);
 	if (!str)
-		return ("(null)");
-	return (str);
+	{
+		ptr = (char *)malloc(sizeof(char) * 7);
+		ft_strlcpy(ptr, "(null)", 7);
+	}
+	else
+	{
+		ptr = (char *)malloc(sizeof(char) * (ft_strlen(str) + 1));
+		ft_strlcpy(ptr, str, ft_strlen(str) + 1);
+	}
+	return (ptr);
 }

@@ -12,7 +12,7 @@
 
 #include "ft_printf.h"
 
-int	ft_hexdigits(long int dec)
+int	ft_hexdigits(unsigned long int dec)
 {
 	int		counter;
 
@@ -39,11 +39,12 @@ static void	ft_precision(t_list1 *dlst)
 		{
 			str = (char *)malloc(sizeof (char) * (dlst->precision + 1));
 			ft_memset(str, '0', dlst->precision - ft_strlen(dlst->substr));
+			str[dlst->precision - ft_strlen(dlst->substr)] = '\0';
 			ft_strlcat(str, dlst->substr, sizeof(char) * (dlst->precision + 1));
 			(free(dlst->substr), dlst->substr = str);
 		}
 		else if (dlst->precision == 0 && dlst->dot_flag && *dlst->substr == '0')
-			dlst->substr = "\0";
+			dlst->substr[0] = '\0';
 	}
 	else if (*dlst->str == 's' && dlst->precision < ft_strlen(dlst->substr)
 		&& dlst->dot_flag)

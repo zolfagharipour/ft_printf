@@ -38,18 +38,13 @@ static void	ft_sprint(t_list1 *dlst)
 		ft_putchar_fd(dlst->substr[i], 1);
 		dlst->printed++;
 		i++;
-		if (dlst->width > 0)
-			dlst->width--;
 	}
+	free(dlst->substr);
 }
 
 static void	ft_zeros(t_list1 *dlst)
 {
-	size_t	i;
-
-	i = 0;
-	while (i < dlst->width - ft_strlen(dlst->substr)
-		&& dlst->width > ft_strlen(dlst->substr))
+	while (dlst->width > 0)
 	{
 		if (dlst->zero_flag)
 		{
@@ -61,11 +56,11 @@ static void	ft_zeros(t_list1 *dlst)
 			write(1, " ", 1);
 			dlst->printed++;
 		}
-		i++;
+		dlst->width--;
 	}
 }
 
-static void	ft_min(t_list1 *dlst)
+static void	ft_nomin(t_list1 *dlst)
 {
 	if (dlst->zero_flag && dlst->prefix)
 	{
@@ -89,8 +84,12 @@ void	ft_subprint(t_list1 *dlst)
 		dlst->width -= 2;
 	if (dlst->prefix && dlst->width > 1)
 		dlst->width--;
+	if (dlst->width > ft_strlen(dlst->substr))
+		dlst->width -= ft_strlen(dlst->substr);
+	else
+		dlst->width = 0;
 	if (!dlst->min_flag)
-		ft_min(dlst);
+		ft_nomin(dlst);
 	else
 	{
 		if (dlst->prefix)

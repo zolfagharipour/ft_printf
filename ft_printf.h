@@ -44,6 +44,6 @@ void	ft_conv_x(t_list1 *dlst);
 void	ft_conv_p(t_list1 *dlst);
 char	*ft_conv_c(t_list1 *dlst);
 char	*ft_conv_s(t_list1 *dlst);
-int		ft_hexdigits(long int dec);
+int		ft_hexdigits(unsigned long int dec);
 
 #endif

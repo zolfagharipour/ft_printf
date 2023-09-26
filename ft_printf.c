@@ -51,7 +51,6 @@ static int	ft_percent(t_list1 *dlst)
 			dlst->str++;
 			ft_subprint(dlst);
 		}
-		free(dlst->substr);
 	}
 	return (1);
 }
@@ -99,11 +98,4 @@ int	ft_printf(const char *format, ...)
 	}
 	va_end(args);
 	return (dlst.printed);
-}
-#include <stdio.h>
-int main()
-{
-	ft_printf("p25 %s\n", "10");
-	// printf("\n%d\n",    printf("p25 %.50x\n", 100));
-	// printf("\n%d\n", printf("t7 {%1.50d}", -10));
 }
