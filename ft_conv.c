@@ -28,12 +28,15 @@ void	ft_conv_x(t_list1 *dlst)
 	long int	nb;
 	int			i;
 
-	nb = va_arg(*dlst->args, long int);
+	nb = (unsigned)va_arg(*dlst->args, long int);
 	i = ft_hexdigits(nb);
 	dlst->substr = (char *)malloc((i + 1) * sizeof(char));
 	dlst->substr[i] = '\0';
 	if (nb == 0)
+	{
 		dlst->substr[0] = '0';
+		dlst->hash_flag = 0;
+	}
 	while (nb > 0)
 	{
 		i--;
@@ -81,6 +84,7 @@ char	*ft_conv_c(t_list1 *dlst)
 	nbr = va_arg(*dlst->args, int);
 	if (!nbr)
 	{
+		write (1, "\0", 1);
 		dlst->printed++;
 		if (dlst->width > 0)
 			dlst->width--;

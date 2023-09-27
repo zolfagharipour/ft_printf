@@ -36,6 +36,7 @@ static void	ft_printcent(t_list1 *dlst)
 static int	ft_percent(t_list1 *dlst)
 {
 	const char	*ptr;
+	int			p;
 
 	ptr = dlst->str;
 	if (!ft_flags(dlst))
@@ -44,8 +45,14 @@ static int	ft_percent(t_list1 *dlst)
 		ft_printcent(dlst);
 	else
 	{
-		if (!ft_conversion(dlst))
+		p = ft_conversion(dlst);
+		if (p == 2)
+		{
 			dlst->str = ptr;
+			(write(1, "%%", 1), dlst->printed++);
+		}
+		else if (p == 0)
+			return (0);
 		else
 		{
 			dlst->str++;
@@ -88,6 +95,8 @@ int	ft_printf(const char *format, ...)
 
 	va_start(args, format);
 	ft_init(&dlst);
+	if (format == 0)
+		return (-1);
 	dlst.printed = 0;
 	dlst.str = format;
 	dlst.args = &args;

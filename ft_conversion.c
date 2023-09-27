@@ -66,16 +66,15 @@ int	ft_conversion(t_list1 *dlst)
 	else if (*dlst->str == 'd' || *dlst->str == 'i')
 		dlst->substr = ft_itoa_s(va_arg(*dlst->args, int), dlst);
 	else if (*dlst->str == 'u')
-		dlst->substr = ft_itoa(va_arg(*dlst->args, long int));
+		dlst->substr = ft_itoa(va_arg(*dlst->args, unsigned int));
 	else if (*dlst->str == 'x' || *dlst->str == 'X')
 		ft_conv_x(dlst);
 	else if (*dlst->str == 'p')
 		ft_conv_p(dlst);
 	else
-	{
-		write(1, "%%", 1);
+		return (2);
+	if (!dlst->substr)
 		return (0);
-	}
 	if (*dlst->str != 'd' && *dlst->str != 'i' && *dlst->str != 'p')
 		dlst->prefix = '\0';
 	if (*dlst->str != 'x' && *dlst->str != 'X')

@@ -13,6 +13,8 @@ SRCS		=	ft_conversion.c \
 
 OBJS		= $(SRCS:.c=.o)
 
+.PHONY:		all clean fclean re bonus
+
 all:	${NAME} 
 
 $(NAME): $(OBJS)
