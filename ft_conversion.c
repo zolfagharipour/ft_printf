@@ -28,23 +28,35 @@ int	ft_hexdigits(unsigned long int dec)
 		return (1);
 }
 
-static void	ft_precision(t_list1 *dlst)
+static int	ft_prec_nb(t_list1 *dlst)
+{
+	char	*str;
+
+	if (dlst->precision > ft_strlen(dlst->substr))
+	{
+		str = (char *)malloc(sizeof (char) * (dlst->precision + 1));
+		if (!str)
+			return (0);
+		ft_memset(str, '0', dlst->precision - ft_strlen(dlst->substr));
+		str[dlst->precision - ft_strlen(dlst->substr)] = '\0';
+		ft_strlcat(str, dlst->substr, sizeof(char) * (dlst->precision + 1));
+		free(dlst->substr);
+		dlst->substr = str;
+	}
+	else if (dlst->precision == 0 && dlst->dot_flag && *dlst->substr == '0')
+		dlst->substr[0] = '\0';
+	return (1);
+}
+
+static int	ft_precision(t_list1 *dlst)
 {
 	char	*str;
 
 	if (*dlst->str == 'd' || *dlst->str == 'i' || *dlst->str == 'x'
 		|| *dlst->str == 'X' || *dlst->str == 'u')
 	{
-		if (dlst->precision > ft_strlen(dlst->substr))
-		{
-			str = (char *)malloc(sizeof (char) * (dlst->precision + 1));
-			ft_memset(str, '0', dlst->precision - ft_strlen(dlst->substr));
-			str[dlst->precision - ft_strlen(dlst->substr)] = '\0';
-			ft_strlcat(str, dlst->substr, sizeof(char) * (dlst->precision + 1));
-			(free(dlst->substr), dlst->substr = str);
-		}
-		else if (dlst->precision == 0 && dlst->dot_flag && *dlst->substr == '0')
-			dlst->substr[0] = '\0';
+		if (!ft_prec_nb(dlst))
+			return (0);
 	}
 	else if (*dlst->str == 's' && dlst->precision < ft_strlen(dlst->substr)
 		&& dlst->dot_flag)
@@ -52,9 +64,12 @@ static void	ft_precision(t_list1 *dlst)
 		if (ft_strncmp(dlst->substr, "(null)", 7) == 0)
 			dlst->precision = 0;
 		str = (char *)malloc(sizeof (char) * (dlst->precision + 1));
+		if (!str)
+			return (0);
 		ft_strlcpy(str, dlst->substr, sizeof (char) * (dlst->precision + 1));
 		(free(dlst->substr), dlst->substr = str);
 	}
+	return (1);
 }
 
 int	ft_conversion(t_list1 *dlst)
@@ -68,9 +83,9 @@ int	ft_conversion(t_list1 *dlst)
 	else if (*dlst->str == 'u')
 		dlst->substr = ft_itoa(va_arg(*dlst->args, unsigned int));
 	else if (*dlst->str == 'x' || *dlst->str == 'X')
-		ft_conv_x(dlst);
+		dlst->substr = ft_conv_x(dlst);
 	else if (*dlst->str == 'p')
-		ft_conv_p(dlst);
+		dlst->substr = ft_conv_p(dlst);
 	else
 		return (2);
 	if (!dlst->substr)
@@ -81,6 +96,7 @@ int	ft_conversion(t_list1 *dlst)
 		dlst->hash_flag = 0;
 	if (*dlst->str == 'c' || *dlst->str == 's')
 		dlst->zero_flag = 0;
-	ft_precision(dlst);
+	if (!ft_precision(dlst))
+		return (0);
 	return (1);
 }

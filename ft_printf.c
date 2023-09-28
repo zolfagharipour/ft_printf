@@ -16,7 +16,6 @@ void	ft_init(t_list1 *dlst)
 {
 	dlst->substr = 0;
 	dlst->prefix = 0;
-	dlst->arg_count = 0;
 	dlst->dot_flag = 0;
 	dlst->min_flag = 0;
 	dlst->zero_flag = 0;

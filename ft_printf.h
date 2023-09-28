@@ -22,7 +22,6 @@ typedef struct s1_list {
 	char		*substr;
 	char		prefix;
 	int			printed;
-	int			arg_count;
 	int			dot_flag;
 	int			min_flag;
 	int			zero_flag;
@@ -40,8 +39,8 @@ int		ft_conversion(t_list1 *datalist);
 char	*ft_itoa_s(int n, t_list1 *datalist);
 void	ft_init(t_list1 *dlst);
 int		ft_flags(t_list1 *dlst);
-void	ft_conv_x(t_list1 *dlst);
-void	ft_conv_p(t_list1 *dlst);
+char	*ft_conv_x(t_list1 *dlst);
+char	*ft_conv_p(t_list1 *dlst);
 char	*ft_conv_c(t_list1 *dlst);
 char	*ft_conv_s(t_list1 *dlst);
 int		ft_hexdigits(unsigned long int dec);
